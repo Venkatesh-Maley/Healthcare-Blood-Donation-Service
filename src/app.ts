@@ -15,6 +15,10 @@ app.use(express.json());
 setupSwagger(app);
 
 // Routes
+app.get('/', (req, res) => {
+    res.status(200).json({ message: 'Server running successfully' });
+});
+
 app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
 app.use('/admin', adminRoutes);
