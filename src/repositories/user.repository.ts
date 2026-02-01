@@ -17,6 +17,14 @@ export class UserRepository {
     async getAll(): Promise<IUser[]> {
         return User.find().select('-password');
     }
+
+    async update(id: string, userData: Partial<IUser>): Promise<IUser | null> {
+        return User.findByIdAndUpdate(id, userData, { new: true }).select('-password');
+    }
+
+    async delete(id: string): Promise<IUser | null> {
+        return User.findByIdAndDelete(id);
+    }
 }
 
 export default new UserRepository();

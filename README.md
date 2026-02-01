@@ -144,6 +144,11 @@ REDIS_URL=redis://localhost:6379
 | PATCH | `/admin/blood-requests/:id/approve` | Approve a single request | Admin Only |
 | PATCH | `/admin/blood-requests/:id/toggle-approval` | Add/Remove request from batch | Admin Only |
 | POST | `/admin/blood-requests/batch-approve` | Approve all batched requests | Admin Only |
+| **POST** | `/admin/users` | **Create a new user** | Admin Only |
+| **GET** | `/admin/users` | **View all users** | Admin Only |
+| **GET** | `/admin/users/:id` | **View user by ID** | Admin Only |
+| **PATCH** | `/admin/users/:id` | **Update user details** | Admin Only |
+| **DELETE** | `/admin/users/:id` | **Delete a user** | Admin Only |
 
 ### User Profile
 | Method | Endpoint | Description | Access |
