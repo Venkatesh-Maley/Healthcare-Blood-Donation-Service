@@ -13,9 +13,9 @@ const options: swaggerJsdoc.Options = {
         },
         servers: [
             {
-                url: 'http://localhost:5000',
-                description: 'Local server',
-            },
+                url: '/',
+                description: 'Default Server',
+            }
         ],
         components: {
             securitySchemes: {
@@ -32,13 +32,14 @@ const options: swaggerJsdoc.Options = {
             },
         ],
     },
-    // Vercel compatible paths: Search for both TS (dev) and JS (production)
+    // Vercel compatible paths: Use relative and absolute to be safe
     apis: [
         path.join(process.cwd(), 'src/routes/*.ts'),
         path.join(process.cwd(), 'dist/routes/*.js'),
-        path.join(process.cwd(), 'api/routes/*.js'), // Some serverless setups use this
         './src/routes/*.ts',
-        './dist/routes/*.js'
+        './dist/routes/*.js',
+        './routes/*.js',
+        'src/routes/*.ts'
     ],
 };
 
@@ -46,12 +47,16 @@ const swaggerSpec = swaggerJsdoc(options);
 
 export const setupSwagger = (app: Express) => {
     try {
-        const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
+        // Essential for Vercel: Use CDN assets for Swagger UI
+        const CSS_URL = "https://cdn.jsdelivr.net/npm/swagger-ui-dist@4.3.0/swagger-ui.css";
+        const JS_URL = "https://cdn.jsdelivr.net/npm/swagger-ui-dist@4.3.0/swagger-ui-bundle.js";
+        const PRESET_JS_URL = "https://cdn.jsdelivr.net/npm/swagger-ui-dist@4.3.0/swagger-ui-standalone-preset.js";
 
         app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
             explorer: true,
             customSiteTitle: 'Blood Donation API Docs',
             customCssUrl: CSS_URL,
+            customJs: [JS_URL, PRESET_JS_URL],
             customCss: '.swagger-ui .topbar { display: none }'
         }));
     } catch (error) {
