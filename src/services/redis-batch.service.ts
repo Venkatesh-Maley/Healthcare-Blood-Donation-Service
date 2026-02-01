@@ -1,7 +1,4 @@
-import Redis from 'ioredis';
-import { BloodRequestStatus } from 'models/blood-request.model';
-
-const redis = new Redis(process.env.REDIS_URL || 'redis://localhost:6379');
+import redis from '../config/redis.config';
 
 // sudo service redis-server start
 // redis-cli ping

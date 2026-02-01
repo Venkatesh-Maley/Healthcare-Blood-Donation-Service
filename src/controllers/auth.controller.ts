@@ -20,6 +20,9 @@ export class AuthController {
             const result = await authService.login(email, password);
             res.status(200).json(result);
         } catch (error: any) {
+            if (error.message.includes('Too many login attempts')) {
+                return res.status(429).json({ message: error.message });
+            }
             res.status(401).json({ message: error.message });
         }
     }

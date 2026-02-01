@@ -1,6 +1,7 @@
 import userRepository from '../repositories/user.repository';
 import { IUser } from '../models/user.model';
 import * as jwtUtil from '../utils/jwt.util';
+import rateLimitService from './rate-limit.service';
 
 export class AuthService {
     async register(userData: Partial<IUser>) {
@@ -18,10 +19,22 @@ export class AuthService {
     }
 
     async login(email: string, password: string) {
+        // 1. Check if user is blocked
+        if (await rateLimitService.isBlocked(email)) {
+            const minutesLeft = await rateLimitService.getRemainingTime(email);
+            throw new Error(`Too many login attempts. Please try again in ${minutesLeft} minutes.`);
+        }
+
         const user = await userRepository.findByEmail(email);
+
+        // 2. Validate credentials
         if (!user || !(await user.comparePassword(password))) {
+            await rateLimitService.incrementAttempts(email);
             throw new Error('Invalid credentials');
         }
+
+        // 3. Success: Reset attempts
+        await rateLimitService.resetAttempts(email);
 
         const payload = { userId: (user._id as any).toString(), role: user.role };
         const accessToken = jwtUtil.generateAccessToken(payload);
