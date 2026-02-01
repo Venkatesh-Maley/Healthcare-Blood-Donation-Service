@@ -10,7 +10,7 @@ const options: swaggerJsdoc.Options = {
         info: {
             title: 'Healthcare Blood Donation Service API',
             version: '1.0.0',
-            description: 'API documentation for the Healthcare Blood Donation Service with JWT and RBAC.',
+            description: 'Comprehensive API for managing blood donations, user profiles, and administrative workflows. Includes secure JWT authentication, Role-Based Access Control (RBAC), and Redis-backed batch processing for efficient admin operations.',
         },
         servers: [
             {

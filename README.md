@@ -10,6 +10,7 @@ A production-ready blood donation management system built with Node.js, Express,
 - **Volunteer System**: Users can accept/volunteer for approved blood requests.
 - **JWT Auth**: Secure implementation of Access Tokens (15m) and Refresh Tokens (7d).
 - **RBAC**: Protected routes based on roles (`ADMIN`, `USER`).
+- **Rate Limiting**: Login attempt protection using Redis (3 attempts, 1-hour lockout).
 - **Swagger Documentation**: Interactive API testing playground at `/api-docs`.
 - **Clean Architecture**: Separation of concerns using Controller -> Service -> Repository layers.
 
@@ -17,11 +18,11 @@ A production-ready blood donation management system built with Node.js, Express,
 
 - **Runtime**: Node.js
 - **Framework**: Express.js
-- **Language**: TypeScript
+- **Language**: TypeScript (with full type definitions)
 - **Database**: MongoDB (via Mongoose)
 - **Cache/Queue**: Redis (for batch operations)
 - **Security**: JWT, Bcrypt
-- **Documentation**: Swagger UI
+- **Documentation**: Swagger UI (OpenAPI 3.0)
 
 ## 📂 Project Structure
 
@@ -68,6 +69,17 @@ graph TD
 2. **State Management**: Redis stores the `requestId` in a Hash Set tied to the `adminId`.
 3. **Execution**: When "Approve All" is clicked, the `batch-approve` API fetches all IDs from Redis and processes them in parallel using `Promise.allSettled`.
 4. **Cleanup**: Once processed, the Redis batch is cleared for that admin.
+ 
+## 🛑 Redis Integration
+ 
+Redis is used as a high-performance in-memory data store for two critical system functions:
+ 
+- **Rate Limiting**: Protects authentication endpoints by tracking login attempts.
+  - **Threshold**: 3 failed attempts.
+  - **Lockout**: 1-hour session block stored in Redis with TTL.
+- **Admin Batch Processing**: Manages the state of selected blood requests for bulk actions.
+  - Efficiently handles multiple request IDs using Redis Hashes (`HSET`).
+  - Ensures atomic operations and fast retrieval for batch approvals.
 
 ## ⚙️ How it Works
 
