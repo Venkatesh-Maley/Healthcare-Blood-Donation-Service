@@ -1,7 +1,6 @@
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { Express } from 'express';
-
 import path from 'path';
 
 const options: swaggerJsdoc.Options = {
@@ -33,8 +32,14 @@ const options: swaggerJsdoc.Options = {
             },
         ],
     },
-    // Use process.cwd() to get the project root consistently
-    apis: [path.join(process.cwd(), 'src/routes/*.ts'), path.join(process.cwd(), 'dist/routes/*.js')],
+    // Vercel compatible paths: Search for both TS (dev) and JS (production)
+    apis: [
+        path.join(process.cwd(), 'src/routes/*.ts'),
+        path.join(process.cwd(), 'dist/routes/*.js'),
+        path.join(process.cwd(), 'api/routes/*.js'), // Some serverless setups use this
+        './src/routes/*.ts',
+        './dist/routes/*.js'
+    ],
 };
 
 const swaggerSpec = swaggerJsdoc(options);
