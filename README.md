@@ -155,27 +155,5 @@ REDIS_URL=redis://localhost:6379
 | :--- | :--- | :--- | :--- |
 | GET | `/users/profile` | Get full user profile | Authenticated |
 
-## 🚀 Deployment (Vercel)
- 
- This project is configured for easy deployment on **Vercel**.
- 
- ### 1. Managed Services
- Since Vercel is serverless, you cannot use local MongoDB or Redis.
- - **Database**: Use [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) (Free Tier).
- - **Redis**: Use [Upstash](https://upstash.com/) or [Redis Cloud](https://redis.io/cloud/) (Free Tier).
- 
- ### 2. Steps to Deploy
- 1. Install Vercel CLI: `npm i -g vercel`
- 2. Run `vercel` in the project root.
- 3. Follow the prompts to link your account.
- 4. Add the following **Environment Variables** in the Vercel Dashboard:
-    - `MONGODB_URI`
-    - `REDIS_URL` (Use the connection string from Upstash/Redis Cloud)
-    - `JWT_SECRET`
-    - `JWT_REFRESH_SECRET`
-    - `ACCESS_TOKEN_EXPIRY` (e.g., `15m`)
-    - `REFRESH_TOKEN_EXPIRY` (e.g., `7d`)
- 5. Deploy: `vercel --prod`
- 
- ## 🧪 Interactive Docs
- Access the Swagger UI at: `http://localhost:5000/api-docs` (Local) or `https://your-app.vercel.app/api-docs` (Production)
+## 🧪 Interactive Docs
+Access the Swagger UI at: `http://localhost:5000/api-docs`
