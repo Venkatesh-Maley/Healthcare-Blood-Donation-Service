@@ -48,4 +48,88 @@ router.get('/blood-requests', bloodRequestController.getAllRequests);
  */
 router.patch('/blood-requests/:id/approve', bloodRequestController.approveRequest);
 
+/**
+ * @swagger
+ * /admin/blood-requests/{id}/toggle-approval:
+ *   patch:
+ *     summary: Add or remove a request from the admin's approval batch
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the blood request
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - action
+ *             properties:
+ *               action:
+ *                 type: string
+ *                 enum: [add, remove]
+ *                 description: Whether to add or remove from batch
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 count:
+ *                   type: integer
+ *                 total:
+ *                   type: integer
+ *       500:
+ *         description: Server error
+ */
+router.patch('/blood-requests/:id/toggle-approval', bloodRequestController.toggleApproval);
+
+/**
+ * @swagger
+ * /admin/blood-requests/batch-approve:
+ *   post:
+ *     summary: Approve all blood requests currently in the admin's batch
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Batch approval completed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 summary:
+ *                   type: object
+ *                   properties:
+ *                     total:
+ *                       type: integer
+ *                     approved:
+ *                       type: integer
+ *                     failed:
+ *                       type: integer
+ *                     failedDetails:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *       400:
+ *         description: Batch is empty
+ *       500:
+ *         description: Server error
+ */
+router.post('/blood-requests/batch-approve', bloodRequestController.submitBatchApproval);
 export default router;
