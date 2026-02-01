@@ -32,16 +32,27 @@ const options: swaggerJsdoc.Options = {
             },
         ],
     },
-    apis: [path.join(__dirname, '../routes/*.{ts,js}')],
+    // Vercel compatible paths: Search for both TS (dev) and JS (production)
+    apis: [
+        path.join(process.cwd(), 'src/routes/*.ts'),
+        path.join(process.cwd(), 'dist/routes/*.js'),
+        path.join(process.cwd(), 'api/routes/*.js'), // Some serverless setups use this
+        './src/routes/*.ts',
+        './dist/routes/*.js'
+    ],
 };
 
 const swaggerSpec = swaggerJsdoc(options);
 
 export const setupSwagger = (app: Express) => {
     try {
+        const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
+
         app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
             explorer: true,
-            customSiteTitle: 'Blood Donation API Docs'
+            customSiteTitle: 'Blood Donation API Docs',
+            customCssUrl: CSS_URL,
+            customCss: '.swagger-ui .topbar { display: none }'
         }));
     } catch (error) {
         console.error('Error mounting Swagger UI:', error);
